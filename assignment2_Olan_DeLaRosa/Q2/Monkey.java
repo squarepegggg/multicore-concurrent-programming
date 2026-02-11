@@ -21,9 +21,7 @@ public class Monkey {
         }
     }
     public void ClimbRope(int direction) throws InterruptedException {
-        //if count > 0 then we need to check to see if the current direction is ours or not
         ropeLock.lock();
-        System.out.println(Thread.currentThread().getName() + " count=" + count.get() + " dir=" + direction);
 
         while (true) {
             int currentDirection = currDirection.get();
