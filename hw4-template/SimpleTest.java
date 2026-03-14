@@ -1,4 +1,7 @@
 import org.junit.Test;
+
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class SimpleTest {
@@ -53,6 +56,30 @@ public class SimpleTest {
         pr.solve();
         int[] reduce = pr.getSolution();
         assertArrayEquals(expected, reduce);
+    }
+    @Test public void testParallelReduce2() {
+        int[] A = { 415, -373, 174, 373, 67, 500, 304, -124, 159, -301, -360, 216, -121, -512, -160, -465 };
+        int[] expected = { -208, 1336, -1544, 589, 747, -286, -1258, 42, 547, 567, 180, -142, -144, -633, -625 };
+
+        ParallelReduce pr = new ParallelReduce(A);
+        pr.solve();
+        int[] reduce = pr.getSolution();
+        assertArrayEquals(expected, reduce);
+    }
+
+    @Test public void testParallelReduce3() {
+        int[] A = { -409, -374, -426, 367, 317, -68, 231, -438, -121, 113, 452, -373, -4, -354, -411, -177, -194, 110, 158, -379, -394, 284, 200, -121, -335, -354, 391, 249, -211, 436, 373, 456, -84, 174, 22, 288, -423, 171, 138, 356, -264, 313, 99, 226, 461, -8, -98 };
+        int expected = 0;
+        for (int i = 0;i < A.length;i++) {
+            expected += A[i];
+        }
+
+
+        ParallelReduce pr = new ParallelReduce(A);
+        pr.solve();
+        int[] reduce = pr.getSolution();
+        //System.out.print(Arrays.toString(reduce));
+        assertEquals(expected, reduce[0]);
     }
 
     @Test
