@@ -53,6 +53,9 @@ public class ParallelReduce extends LLP {
     public int[] getSolution() {
         // Trim the state vector to only the reduce elements
         // Your result should have n-1 elements
+        if (n == 1) {
+            return GlobalSpace;
+        }
         int[] solution = new int[n-1];
         for (int i = 0; i < n-1; i++) {
             solution[i] = GlobalSpace[i +  1];

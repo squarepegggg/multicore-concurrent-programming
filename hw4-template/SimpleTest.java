@@ -82,6 +82,32 @@ public class SimpleTest {
         assertEquals(expected, reduce[0]);
     }
 
+    @Test public void testParallelReduce4() {
+        int[] A = {100};
+        int[] expected = {100};
+
+        ParallelReduce pr = new ParallelReduce(A);
+        pr.solve();
+        int[] reduce = pr.getSolution();
+        assertArrayEquals(expected, reduce);
+    }
+
+    @Test public void testParallelPrefix2() {
+        int[] A = { 100 };
+        int[] expectedPR = {100};
+        int[] expectedPP = {0};
+
+        ParallelReduce pr = new ParallelReduce(A);
+        pr.solve();
+        int[] S = pr.getSolution();
+        assertArrayEquals(expectedPR, S);
+
+        ParallelPrefix pp = new ParallelPrefix(A, S);
+        pp.solve();
+        int[] prefix = pp.getSolution();
+        assertArrayEquals(expectedPP, prefix);
+    }
+
     @Test
     public void testParallelPrefix() {
         int[] A = { 1, 2, 3, 4, 5, 6, 7, 8 };
