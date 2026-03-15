@@ -1,37 +1,54 @@
 public class ListRank extends LLP {
-    private int[] parent;
+    private int[] pred;
+    // rank[i] = accumulated hops from node i to the root
+    private int[] rank;
+    // jumper[i] = the node we currently leap to in rank[i] steps
+    private int[] jumper;
+    private int head;
 
-    // parent[i] = index of parent of node i
-    // root r has parent[r] = -1
-    public ListRank(int[] parent) {
-        super();
-        this.parent = parent;
-        this.numThreads = parent.length;
-        this.GlobalSpace = new int[parent.length];
-        // Initialize: every non-root node starts with rank 1 (optimistic guess),
-        // root starts at 0
-        for (int i = 0; i < parent.length; i++) {
-            if (parent[i] == -1) {
-                GlobalSpace[i] = 0; // root
+    // pred[i] = predecessor of node i; the root satisfies pred[root] = -1
+    public ListRank(int[] pred) {
+        super(pred.length);
+        this.pred = pred;
+        this.rank = new int[n];
+        this.jumper = new int[n];
+
+        // locate the root node
+        head = -1;
+        for (int i = 0; i < n; i++) {
+            if (pred[i] == -1) { head = i; break; }
+        }
+
+        // base case: root has rank 0 and jumps to itself
+        // every other node starts with rank 1, jumping to its predecessor
+        for (int i = 0; i < n; i++) {
+            if (i == head) {
+                rank[i]   = 0;
+                jumper[i] = head;
             } else {
-                GlobalSpace[i] = 1; // all others start at 1
+                rank[i]   = 1;
+                jumper[i] = pred[i];
             }
         }
     }
+
+    // node j still needs work as long as its jumper hasn't landed on the root
     @Override
     public boolean forbidden(int j) {
-        // Root is never forbidden — its rank is always 0
-        if (parent[j] == -1) return false;
-        // Node j is forbidden if its rank doesn't equal parent's rank + 1
-        return GlobalSpace[j] != GlobalSpace[parent[j]] + 1;
+        return jumper[j] != head;
     }
+
+    // pointer jump: fold in the distance through jumper, then leap jumper forward
+    // rank[j]   := rank[j] + rank[jumper[j]]
+    // jumper[j] := jumper[jumper[j]]
     @Override
     public void advance(int j) {
-        // Pull rank from parent and add 1
-        GlobalSpace[j] = GlobalSpace[parent[j]] + 1;
+        rank[j]   = rank[j] + rank[jumper[j]];
+        jumper[j] = jumper[jumper[j]];
     }
-    // Called after solve()
+
+    // returns each node's distance to the root after solve() completes
     public int[] getSolution() {
-        return GlobalSpace;
+        return rank;
     }
 }
