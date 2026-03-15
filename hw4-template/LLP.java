@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,6 +37,7 @@ public abstract class LLP {
             barrier.await();
 
             if (j == 0) {
+               // System.out.println(Arrays.toString(GlobalSpace));
                 if (!anyForbidden.get() || unsatisfiable.get()) {
                     solved.set(true);
                 }
@@ -46,7 +48,7 @@ public abstract class LLP {
     }
 
     public void initThreads(CyclicBarrier barrier) {
-        threads = new Thread[numThreads];
+        threads = new Thread[numThreads + 1];
         for (int t = 0; t < numThreads; t++) {
             final int j = t;
             threads[t] = new Thread(() -> {

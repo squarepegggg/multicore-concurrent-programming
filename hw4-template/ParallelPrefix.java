@@ -2,14 +2,14 @@ public class ParallelPrefix extends LLP {
     int[] arr;
     int[] sumArr;
     int n;
+    int originalLen;
     // A is an input array that we want to compute the prefix scan for
     // S is the pre-computed summation tree (reduction), computed using LLP-Reduce
     public ParallelPrefix(int[] A, int[] S) {
         super();
 
-        int size = 1;
-        while (size < A.length) size *= 2;
-        n = size;
+        originalLen = A.length;
+        n = RandomInstances.ceilPow2(A.length);
 
         arr = new int[n + 1];
         sumArr = new int[n];
@@ -63,8 +63,8 @@ public class ParallelPrefix extends LLP {
     public int[] getSolution() {
         // Return only the prefix scan part of the state vector
         // i.e. return the last n elements
-        int[] solution = new int[n];
-        for (int i = 0; i < n; i++) {
+        int[] solution = new int[originalLen];
+        for (int i = 0; i < originalLen; i++) {
             solution[i] = GlobalSpace[n + i];
         }
         return solution;
