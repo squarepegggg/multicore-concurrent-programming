@@ -32,7 +32,7 @@ public class BellmanFord extends LLP {
     public boolean forbidden(int j) {
         for (int predecessor : predecessors.get(j)) {
             boolean neighborMax = GlobalState[predecessor] == Integer.MAX_VALUE;
-            if (!neighborMax && (GlobalState[j] > GlobalState[predecessor] + adjMatrix[j][predecessor])) {
+            if (!neighborMax && (GlobalState[j] > GlobalState[predecessor] + adjMatrix[predecessor][j])) {
                 return true;
             }
         }
@@ -43,9 +43,9 @@ public class BellmanFord extends LLP {
     public void advance(int j) {
         while (forbidden(j)) {
             for (int predecessor : predecessors.get(j)) {
-                int val =  GlobalState[predecessor] + adjMatrix[j][predecessor];
+                int val =  GlobalState[predecessor] + adjMatrix[predecessor][j];
                 boolean notMax = !(GlobalState[predecessor] == Integer.MAX_VALUE);
-                boolean forbidden = GlobalState[j] > GlobalState[predecessor] + adjMatrix[j][predecessor];
+                boolean forbidden = GlobalState[j] > val;
                 if (notMax && forbidden) {
                     GlobalState[j] = val;
                 }
